@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Bubbles : Dragable
 {
+    public Vector3 nextScenePosition;
     override public void Interact()
     {
         //transform.position = goalPoint;
+        FindObjectOfType<MoveCamera>().Move(nextScenePosition);
     }
 }
