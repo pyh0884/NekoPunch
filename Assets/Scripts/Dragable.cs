@@ -25,6 +25,14 @@ public class Dragable : MonoBehaviour
     public bool isVertical = false;
     [Header("是否滑向坐标正方向")]
     public bool positiveDirection = true;
+    [Header("是否只允许向目标方向移动(仅限横竖方向)")]
+    public bool moveOnlyOnRightDirection = false;
+    [Header("是否只需要移动出范围")]
+    public bool moveOutOfZone = false;
+    [Header("范围的左下角坐标")]
+    public Vector3 zoneBottomLeft = new Vector3(-1, -1, 0);
+    [Header("范围的右上角坐标")]
+    public Vector3 zoneUpperRight = new Vector3(1, 1, 0);
     [Header("松手后是否移回起点位置")]
     public bool ifMoveBack = true;
     [Header("移回速度，0表示瞬间移回")]
@@ -42,30 +50,40 @@ public class Dragable : MonoBehaviour
     public bool isFinished = false;
     [Header("靠近目标点的百分比")]
     public float ratio;
+    private Vector3 startScale;
     #endregion
     private void Start()
     {
         startPoint = transform.position;
         distance = (goalPoint - startPoint).magnitude;
+        startScale = transform.localScale;
     }
 
     //判断落点是否满足给定的条件
     private bool isNearEnough() 
     {
-        if (isPrecise)
+        if (moveOutOfZone)
         {
-            return (Mathf.Abs(transform.position.x - goalPoint.x) < goalRadius
-                    && Mathf.Abs(transform.position.y - goalPoint.y) < goalRadius);
+            if (transform.position.x < startPoint.x + zoneBottomLeft.x || transform.position.x > startPoint.x + zoneUpperRight.x) return true;
+            if (transform.position.y < startPoint.y + zoneBottomLeft.y || transform.position.y > startPoint.y + zoneUpperRight.y) return true;
         }
-        else if (isHorizontal)
+        else
         {
-            if (positiveDirection) return transform.position.x > goalPoint.x;
-            else return transform.position.x < goalPoint.x;
-        }
-        else if (isVertical)
-        {
-            if (positiveDirection) return transform.position.y > goalPoint.y;
-            else return transform.position.y < goalPoint.y;
+            if (isPrecise)
+            {
+                return (Mathf.Abs(transform.position.x - goalPoint.x) < goalRadius
+                        && Mathf.Abs(transform.position.y - goalPoint.y) < goalRadius);
+            }
+            else if (isHorizontal)
+            {
+                if (positiveDirection) return transform.position.x > goalPoint.x;
+                else return transform.position.x < goalPoint.x;
+            }
+            else if (isVertical)
+            {
+                if (positiveDirection) return transform.position.y > goalPoint.y;
+                else return transform.position.y < goalPoint.y;
+            }
         }
         return false;
     }
@@ -88,11 +106,35 @@ public class Dragable : MonoBehaviour
             {
                 if (isHorizontal)
                 {
-                    displacement = new Vector3(mousePosition.x - clickPoint.x, 0, 0);
+                    float XDisp = mousePosition.x - clickPoint.x;
+                    if (moveOnlyOnRightDirection) 
+                    {
+                        if (positiveDirection)
+                        {
+                            XDisp = Mathf.Clamp(XDisp, 0, Mathf.Infinity);
+                        }
+                        else
+                        {
+                            XDisp = Mathf.Clamp(XDisp, Mathf.NegativeInfinity, 0);
+                        }
+                    }
+                    displacement = new Vector3(XDisp, 0, 0);
                 }
                 else if (isVertical)
                 {
-                    displacement = new Vector3(0, mousePosition.y - clickPoint.y, 0);
+                    float YDisp = mousePosition.y - clickPoint.y;
+                    if (moveOnlyOnRightDirection)
+                    {
+                        if (positiveDirection)
+                        {
+                            YDisp = Mathf.Clamp(YDisp, 0, Mathf.Infinity);
+                        }
+                        else
+                        {
+                            YDisp = Mathf.Clamp(YDisp, Mathf.NegativeInfinity, 0);
+                        }
+                    }
+                    displacement = new Vector3(0, YDisp, 0);
                 }
             }
             transform.position = startPoint + displacement;
@@ -111,6 +153,13 @@ public class Dragable : MonoBehaviour
             }
             if (isAuto) 
             {
+                if (moveOutOfZone)
+                {
+                    Interact();
+                    isAuto = false;
+                    isFinished = true;
+                    return;
+                }
                 transform.position = Vector3.MoveTowards(transform.position, goalPoint, autoMoveSpeed * Time.deltaTime);
                 if (transform.position == goalPoint) 
                 {
@@ -128,7 +177,7 @@ public class Dragable : MonoBehaviour
             {
                 ratio = 1 - currentDist / distance;
                 float currentScale = targetScale >= 1 ? 1 + ratio * (targetScale - 1) : 1 - ratio * (1 - targetScale);
-                transform.localScale = new Vector3(currentScale, currentScale, 1);
+                transform.localScale = new Vector3(startScale.x * currentScale, startScale.y * currentScale, 1);
             }
         }
     }
