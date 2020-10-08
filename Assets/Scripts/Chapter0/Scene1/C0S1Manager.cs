@@ -28,12 +28,12 @@ public class C0S1Manager : MonoBehaviour
     void Update()
     {
         if (stageIndex != FindObjectOfType<StageHelper>().stageIndex) NextStage();
-        switch (stageIndex) 
+        switch (stageIndex)
         {
             //地铁进站
             case 1:
-                if (!finished) 
-                { 
+                if (!finished)
+                {
                     timer += Time.deltaTime;
                     if (timer > trainLoopTime) 
                     {
