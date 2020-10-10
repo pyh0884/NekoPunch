@@ -15,7 +15,7 @@ public class C0S2Manager : MonoBehaviour
     void Start()
     {
         moveCam = FindObjectOfType<MoveCamera>();
-        moveCam.Move(new Vector3(0, -21.6f, -10));
+        //moveCam.Move(new Vector3(0, -21.6f, -10));
     }
     public void NextStage()
     {

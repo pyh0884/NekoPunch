@@ -5,6 +5,7 @@ using UnityEngine;
 public class FadeOutDestroy : MonoBehaviour
 {
     public bool isStart;
+    public bool notDestroy;
     private SpriteRenderer sr;
     private float alpha = 1;
 
@@ -21,7 +22,14 @@ public class FadeOutDestroy : MonoBehaviour
             sr.color = new Color(1, 1, 1, alpha);
             if (sr.color.a <= 0)
             {
-                Destroy(gameObject);
+                if (notDestroy)
+                {
+                    this.enabled = false;
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }
