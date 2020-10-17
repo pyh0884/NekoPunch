@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Bubbles : Dragable
 {
+    public GameObject[] items;
     public override void Interact()
     {
-        GetComponent<FadeOutDestroy>().enabled = true;
-        GetComponent<FadeOutDestroy>().isStart = true;
-        FindObjectOfType<C0S3Manager>().goodCount -= 1;
+        foreach (GameObject go in items)
+        {
+            go.GetComponent<FadeOutDestroy>().enabled = true;
+            go.GetComponent<FadeOutDestroy>().isStart = true;
+        }
+        FindObjectOfType<StageHelper>().stageIndex += 1;
     }
 }

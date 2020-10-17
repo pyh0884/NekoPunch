@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class C0S2Manager : MonoBehaviour
 {
-    //public GameObject[] Items;
+    public GameObject[] Items;
     public int stageIndex = 1;
-    //public float timer;
+    public float timer;
     private MoveCamera moveCam;
     public bool finished;
     public int goodCount = 3;
@@ -32,30 +32,55 @@ public class C0S2Manager : MonoBehaviour
             case 1:
                 if (!finished)
                 {
-                    //if (goodCount == 2) 
-                    //{
-                    //    //动画
-                    //}
-                    //if (goodCount == 1)
-                    //{
-                    //    //动画
-                    //}
-                    //if (goodCount == 0)
-                    //{
-                    //    //动画
-                    //}
+                    if (goodCount == 2)
+                    {
+                        Items[0].SetActive(true);
+                    }
+                    if (goodCount == 1)
+                    {
+                        Items[0].GetComponent<Animator>().SetBool("Change1", true);
+                    }
+                    if (goodCount == 0)
+                    {
+                        Items[0].GetComponent<Animator>().SetBool("Change2", true);
+                    }
                     if (goodCount + badCount == 0)
                     {
                         moveCam.Move(new Vector3(0, -32.4f, -10));
+                        Destroy(Items[4]);
+                        Destroy(Items[5]);
                         finished = true;
                     }
                 }
                 break;
             case 2:
-                //播片就完事了
+                //猫猫看向兔兔镜头开始移动
                 if (!finished)
                 {
-                    Debug.Log("完事了");
+                    Items[1].transform.position = Vector3.MoveTowards
+                        (Items[1].transform.position, new Vector3(6.5f, -32.4f, 0), 3 * Time.deltaTime);
+                    Items[2].GetComponent<Animator>().SetBool("Turn", true);
+                    if (Items[1].transform.position == new Vector3(6.5f, -32.4f, 0)) 
+                    {
+                        FindObjectOfType<StageHelper>().stageIndex += 1;
+                        Items[3].GetComponent<Animator>().SetBool("Turn", true);
+                        timer = 0;
+                        Destroy(Items[6]);
+                        finished = true;
+                    }
+                }
+                break;
+            case 3:
+                //猫猫兔兔互看+傻笑
+                if (!finished)
+                {
+                    timer += Time.deltaTime;
+                    if (timer >= 1.0f)
+                    {
+                        Items[2].GetComponent<Animator>().SetTrigger("Change");
+                        Items[3].GetComponent<Animator>().SetTrigger("Change");
+                        finished = true;
+                    }
                 }
                 break;
             default: break;

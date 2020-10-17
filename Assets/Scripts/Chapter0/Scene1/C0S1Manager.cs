@@ -217,7 +217,7 @@ public class C0S1Manager : MonoBehaviour
                     timer += Time.deltaTime;
                     alpha = Mathf.Clamp(alpha, 0, 1);
                     alpha += Time.deltaTime * fadeSpeed * .3f;
-                    Items[14].GetComponent<Text>().color = new Color(1, 0, 0, alpha);
+                    Items[14].GetComponent<Image>().color = new Color(1, 0, 0, alpha);
                     if (timer > 1.5f)
                     {
                         finished = true;

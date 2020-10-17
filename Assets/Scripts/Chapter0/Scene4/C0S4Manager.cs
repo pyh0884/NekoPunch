@@ -39,11 +39,6 @@ public class C0S4Manager : MonoBehaviour
                 if (!finished)
                 {
                     Items[1].gameObject.SetActive(true);
-                    Items[2].gameObject.SetActive(true);
-                    Items[3].gameObject.SetActive(true);
-                    Items[4].gameObject.SetActive(true);
-                    Items[5].gameObject.SetActive(true);
-                    Items[6].gameObject.SetActive(true);
                     FindObjectOfType<StageHelper>().stageIndex += 1;
                     finished = true;
                 }
@@ -54,28 +49,78 @@ public class C0S4Manager : MonoBehaviour
                 {
                     if (IconCount == 0) 
                     {
+                        Destroy(Items[1]);
+                        Items[2].gameObject.SetActive(true);
+                        Items[3].GetComponent<Animator>().SetTrigger("Change");
+                        IconCount = 3;
+                        FindObjectOfType<StageHelper>().stageIndex += 1;
+                        finished = true;
+                    }
+                }
+                break;
+            //第二轮表情
+            case 4:
+                if (!finished)
+                {
+                    if (IconCount == 0)
+                    {
+                        Items[3].GetComponent<Animator>().SetTrigger("Change");
+                        Items[4].GetComponent<Animator>().SetTrigger("Change");
                         Items[0].GetComponent<Animator>().SetBool("Calling", false);
                         finished = true;
                     }
                 }
                 break;
             //挂电话后
-            case 4:
+            case 5:
                 if (!finished)
                 {
                     timer += Time.deltaTime;
-                    if (timer > 1.0f)
+                    if (timer > 1.5f)
                     {
-                        Destroy(Items[7]);
                         moveCam.Move(new Vector3(0, -10.8f, -10));
                         finished = true;
                     }
                 }
                 break;
             //切到门铃分镜
-            case 5:
+            case 6:
                 if (!finished)
                 {
+                    Items[5].GetComponent<DogPaw>().enabled = true;
+                    finished = true;
+                }
+                break;
+            //狗狗按上门铃
+            case 7:
+                if (!finished)
+                {
+                    Items[6].GetComponent<Animator>().SetTrigger("Change");
+                    moveCam.Move(new Vector3(0, -21.6f, -10));
+                    finished = true;
+                }
+                break;
+            //猫猫去开门
+            case 8:
+                if (!finished)
+                {
+                    Items[8].GetComponent<OpenDoor>().enabled = true;
+                    finished = true;
+                }
+                break;
+            //开门时
+            case 9:
+                if (!finished)
+                {
+                    Items[7].GetComponent<Animator>().SetTrigger("Change");
+                    finished = true;
+                }
+                break;
+            //开门后
+            case 10:
+                if (!finished)
+                {
+                    moveCam.Move(new Vector3(0, -32.4f, -10));
                     finished = true;
                 }
                 break;
