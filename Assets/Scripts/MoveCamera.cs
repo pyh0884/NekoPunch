@@ -25,6 +25,14 @@ public class MoveCamera : MonoBehaviour
         targetPosition.z = -10;
         isMoving = true;
     }
+    public void InstantMove(Vector3 targetPos) 
+    {
+        targetPosition = targetPos;
+        currentPosition = targetPos;
+        targetPosition.z = -10;
+        transform.position = targetPosition;
+        FindObjectOfType<StageHelper>().stageIndex += 1;
+    }
     public void ZoomIn(float targetSize, Vector3 targetPos) 
     {
         isZooming = true;

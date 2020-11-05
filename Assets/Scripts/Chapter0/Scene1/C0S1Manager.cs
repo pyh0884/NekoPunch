@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class C0S1Manager : MonoBehaviour
@@ -81,7 +82,7 @@ public class C0S1Manager : MonoBehaviour
                 {
                     Items[6].GetComponent<NamePlate>().enabled = true;
                     Items[7].GetComponent<NamePlate>().enabled = true;
-                    Destroy(Scenes[0]);
+                    Items[15].GetComponent<NamePlate>().enabled = true;
                     finished = true;
                 }
                 break;
@@ -102,7 +103,6 @@ public class C0S1Manager : MonoBehaviour
                 if (!finished)
                 {
                     Items[3].GetComponent<Animator>().enabled = true;
-                    Destroy(Scenes[1]);
                     finished = true;
                 }
                 break;
@@ -160,7 +160,6 @@ public class C0S1Manager : MonoBehaviour
                     if (timer > 1.0f)
                     {
                         moveCam.Move(new Vector3(0, -32.4f, -10));
-                        Destroy(Scenes[2], 2);
                         finished = true;
                     }
                 }
@@ -190,7 +189,6 @@ public class C0S1Manager : MonoBehaviour
                     if (PeopleCount == 0)
                     {
                         moveCam.Move(new Vector3(0, -43.2f, -10));
-                        Destroy(Scenes[3], 2);
                         finished = true;
                     }
                 }
@@ -220,6 +218,18 @@ public class C0S1Manager : MonoBehaviour
                     Items[14].GetComponent<Image>().color = new Color(1, 0, 0, alpha);
                     if (timer > 1.5f)
                     {
+                        FindObjectOfType<StageHelper>().stageIndex += 1;
+                        finished = true;
+                    }
+                }
+                break;
+            case 14:
+                if (!finished)
+                {
+                    timer += Time.deltaTime;
+                    if (timer >= 2.0f)
+                    {
+                        SceneManager.LoadScene(2);
                         finished = true;
                     }
                 }

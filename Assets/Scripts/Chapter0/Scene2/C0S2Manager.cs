@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class C0S2Manager : MonoBehaviour
@@ -79,6 +80,18 @@ public class C0S2Manager : MonoBehaviour
                     {
                         Items[2].GetComponent<Animator>().SetTrigger("Change");
                         Items[3].GetComponent<Animator>().SetTrigger("Change");
+                        FindObjectOfType<StageHelper>().stageIndex += 1;
+                        finished = true;
+                    }
+                }
+                break;
+            case 4:
+                if (!finished)
+                {
+                    timer += Time.deltaTime;
+                    if (timer >= 2.0f)
+                    {
+                        SceneManager.LoadScene(3);
                         finished = true;
                     }
                 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class C0S4Manager : MonoBehaviour
@@ -122,6 +123,17 @@ public class C0S4Manager : MonoBehaviour
                 {
                     moveCam.Move(new Vector3(0, -32.4f, -10));
                     finished = true;
+                }
+                break;
+            case 11:
+                if (!finished)
+                {
+                    timer += Time.deltaTime;
+                    if (timer >= 2.0f)
+                    {
+                        SceneManager.LoadScene(5);
+                        finished = true;
+                    }
                 }
                 break;
             default:break;

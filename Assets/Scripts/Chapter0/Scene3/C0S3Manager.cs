@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class C0S3Manager : MonoBehaviour
@@ -84,19 +85,13 @@ public class C0S3Manager : MonoBehaviour
             case 7://出现标题
                 if (!finished)
                 {
-                    //timer += Time.deltaTime;
-                    //if (timer > 1.5f)
-                    //{
-                    //    Items[9].GetComponent<Image>().color = new Color(255, 0, 0, 255);
-                    //    Items[9].GetComponent<Image>().color = new Color(1, 0, 0, alpha);
-                    //    finished = true;
-                    //}
                     timer += Time.deltaTime;
                     alpha = Mathf.Clamp(alpha, 0, 1);
                     alpha += Time.deltaTime * 5 * .3f;
                     Items[9].GetComponent<Image>().color = new Color(1, 0, 0, alpha);
                     if (timer > 1.5f)
                     {
+                        SceneManager.LoadScene(4);
                         finished = true;
                     }
                 }
